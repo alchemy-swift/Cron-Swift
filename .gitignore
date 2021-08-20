@@ -23,6 +23,7 @@ DerivedData
 /Package.pins
 /Package.resolved
 /.build
+/.swiftpm
 
 # Vim
 *.sw[po]
