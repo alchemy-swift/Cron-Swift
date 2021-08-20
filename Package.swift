@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Cron",
+    name: "cron",
     products: [
        .library(
            name: "Cron",
