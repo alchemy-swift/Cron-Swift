@@ -59,7 +59,7 @@ public struct DatePattern {
         guard let second: Token = ts.count > 1 ? ts[1] : nil else {
             switch (first) {
             case .wildcard: return .any
-            case .number(let num): return .number(num.0)
+            case .number(let num, _): return .number(num)
             case .h: return .hash
             case .l: return .lastDayOfMonth
             case .lW: return .lastWeekdayOfMonth
@@ -70,15 +70,15 @@ public struct DatePattern {
 
         guard let third: Token = ts.count > 2 ? ts[2] : nil else {
             switch (first, second) {
-            case let (.slash, .number(step)):
-                return .step(.any, step.0)
-            case let (.number(dow), .l):
-                guard 0...7 ~= dow.0 else {
+            case let (.slash, .number(stepNum, _)):
+                return .step(.any, stepNum)
+            case let (.number(dowNum, _), .l):
+                guard 0...7 ~= dowNum else {
                     throw InternalError.parseError
                 }
-                return .lastDayOfWeek(DayOfWeek(rawValue: dow.0 % 7)!)
-            case let (.number(num), .w):
-                return .weekday(num.0)
+                return .lastDayOfWeek(DayOfWeek(rawValue: dowNum % 7)!)
+            case let (.number(num, _), .w):
+                return .weekday(num)
             default:
                 throw InternalError.parseError
             }
@@ -86,19 +86,19 @@ public struct DatePattern {
 
         guard let forth: Token = ts.count > 3 ? ts[3] : nil else {
             switch (first, second, third) {
-            case let (.number(begin), .hyphen, .number(end)):
-                return .range(begin.0, end.0)
-            case let (.wildcard, .slash, .number(step)):
-                return .step(.any, step.0)
-            case let (.number(num), .slash, .number(step)):
-                return .step(.number(num.0), step.0)
-            case let (.h, .hyphen, .number(step)):
-                return .step(.hash, step.0)
-            case let (.number(dow), .numberSign, .number(num)):
-                guard 0...7 ~= dow.0 else {
+            case let (.number(beginNum, _), .hyphen, .number(endNum, _)):
+                return .range(beginNum, endNum)
+            case let (.wildcard, .slash, .number(stepNum, _)):
+                return .step(.any, stepNum)
+            case let (.number(num, _), .slash, .number(stepNum, _)):
+                return .step(.number(num), stepNum)
+            case let (.h, .hyphen, .number(stepNum, _)):
+                return .step(.hash, stepNum)
+            case let (.number(dowNum, _), .numberSign, .number(num, _)):
+                guard 0...7 ~= dowNum else {
                     throw InternalError.parseError
                 }
-                return .nthDayOfWeek(DayOfWeek(rawValue: dow.0 % 7)!, num.0)
+                return .nthDayOfWeek(DayOfWeek(rawValue: dowNum % 7)!, num)
             default:
                 throw InternalError.parseError
             }
@@ -110,8 +110,8 @@ public struct DatePattern {
 
         guard let sixth: Token = ts.count > 5 ? ts[5] : nil else {
             switch (first, second, third, forth, fifth) {
-            case let (.number(begin), .hyphen, .number(end), .slash, .number(step)):
-                return .step(.range(begin.0, end.0), step.0)
+            case let (.number(beginNum, _), .hyphen, .number(endNum, _), .slash, .number(stepNum, _)):
+                return .step(.range(beginNum, endNum), stepNum)
             default:
                 throw InternalError.parseError
             }
@@ -119,8 +119,8 @@ public struct DatePattern {
 
         guard let seventh: Token = ts.count > 6 ? ts[6] : nil else {
             switch (first, second, third, forth, fifth, sixth) {
-            case let (.h, .openParen, .number(begin), .hyphen, .number(end), .closeParen):
-                return .rangedHash(begin.0, end.0)
+            case let (.h, .openParen, .number(beginNum, _), .hyphen, .number(endNum, _), .closeParen):
+                return .rangedHash(beginNum, endNum)
             default:
                 throw InternalError.parseError
             }
@@ -132,8 +132,8 @@ public struct DatePattern {
 
         guard let _: Token = ts.count > 8 ? ts[8] : nil else {
             switch (first, second, third, forth, fifth, sixth, seventh, eighth) {
-            case let (.h, .openParen, .number(begin), .hyphen, .number(end), .closeParen, .slash, .number(step)):
-                return .step(.rangedHash(begin.0, end.0), step.0)
+            case let (.h, .openParen, .number(beginNum, _), .hyphen, .number(endNum, _), .closeParen, .slash, .number(stepNum, _)):
+                return .step(.rangedHash(beginNum, endNum), stepNum)
             default:
                 throw InternalError.parseError
             }

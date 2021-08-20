@@ -127,7 +127,7 @@ extension Token: Equatable {}
 
 public func == (lhs: Token, rhs: Token) -> Bool {
     switch (lhs, rhs) {
-    case (.number(let (a, b)), .number(let (c, d))): return a == c && b == d
+    case (let .number(a, b), let .number(c, d)): return a == c && b == d
     case (.wildcard, .wildcard): return true
     case (.slash, .slash): return true
     case (.hyphen, .hyphen): return true
@@ -149,16 +149,16 @@ public func == (lhs: FieldPattern, rhs: FieldPattern) -> Bool {
     case (.any, .any): return true
     case (.number(let a), .number(let b)): return a == b
     case (.hash, .hash): return true
-    case (.rangedHash(let a), .rangedHash(let b)): return a.0 == b.0 && a.1 == b.1
-    case (.step(let a), .step(let b)): return a.0 == b.0 && a.1 == b.1
-    case (.range(let a), .range(let b)): return a.0 == b.0 && a.1 == b.1
+    case (let .rangedHash(a1, a2), let .rangedHash(b1, b2)): return a1 == b1 && a2 == b2
+    case (let .step(a1, a2), let .step(b1, b2)): return a1 == b1 && a2 == b2
+    case (let .range(a1, a2), let .range(b1, b2)): return a1 == b1 && a2 == b2
 
     case (.lastDayOfMonth, .lastDayOfMonth): return true
     case (.lastWeekdayOfMonth, .lastWeekdayOfMonth): return true
     case (.weekday(let a), .weekday(let b)): return a == b
 
-    case (.lastDayOfWeek(let a), .lastDayOfWeek(let b)): return a == b
-    case (.nthDayOfWeek(let a), .nthDayOfWeek(let b)): return a.0 == b.0 && a.1 == b.1
+    case (let .lastDayOfWeek(a), let .lastDayOfWeek(b)): return a == b
+    case (let .nthDayOfWeek(a1, a2), let .nthDayOfWeek(b1, b2)): return a1 == b1 && a2 == b2
 
     //case Or
 
@@ -173,10 +173,10 @@ public func == (lhs: NumberSet, rhs: NumberSet) -> Bool {
     switch (lhs, rhs) {
     case (.any, .any): return true
     case (.number(let a), .number(let b)): return a == b
-    case (.range(let a), .range(let b)): return a.0 == b.0 && a.1 == b.1
-    case (.step(let a), .step(let b)): return a.0 == b.0 && a.1 == b.1
-    case (.or(let a), .or(let b)): return a.0 == b.0 && a.1 == b.1
-    case (.and(let a), .and(let b)): return a.0 == b.0 && a.1 == b.1
+    case (let .range(a1, a2), let .range(b1, b2)): return a1 == b1 && a2 == b2
+    case (let .step(a1, a2), let .step(b1, b2)): return a1 == b1 && a2 == b2
+    case (let .or(a1, a2), let .or(b1, b2)): return a1 == b1 && a2 == b2
+    case (let .and(a1, a2), let .and(b1, b2)): return a1 == b1 && a2 == b2
     default: return false
     }
 }

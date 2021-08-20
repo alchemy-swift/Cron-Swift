@@ -28,10 +28,10 @@ extension NumberSet {
         case .none                     : return false
         case .any                      : return true
         case .number(let v)            : return v == n
-        case .range(let (begin, end))  : return begin <= n && n <= end
-        case .step(let (offset, step)) : return 0 == (n - offset) % step
-        case .or(let (a, b))           : return a.contains(n) || b.contains(n)
-        case .and(let (a, b))          : return a.contains(n) && b.contains(n)
+        case let .range(begin, end)    : return begin <= n && n <= end
+        case let .step(offset, step)   : return 0 == (n - offset) % step
+        case let .or(a, b)             : return a.contains(n) || b.contains(n)
+        case let .and(a, b)            : return a.contains(n) && b.contains(n)
         }
     }
 }
@@ -65,14 +65,14 @@ extension NumberSet {
         case .step(let offset, let step):
             let d = Int(ceil(Double(n + 1 - offset) / Double(step)))
             return d * step + offset
-        case .or(let (a, b)):
+        case let .or(a, b):
             switch (a.next(n), b.next(n)) {
             case (let x?, let y?): return min(x, y)
             case (let x?, nil   ): return x
             case (nil   , let y?): return y
             case (nil   , nil   ): return nil
             }
-        case .and(let (a, b)):
+        case let .and(a, b):
             return _next_and(a, b, a.next(n), b.next(n))
         }
     }
