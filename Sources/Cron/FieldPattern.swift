@@ -128,9 +128,7 @@ extension FieldPattern {
                 }
                 return NumberSet.none
             case .range(let begin, let end): // MON-FRI
-                let ret = (begin...end).reduce(.none) { NumberSet.or($0, .step($1, 7)) }
-                print(ret)
-                return ret
+                return (begin...end).reduce(.none) { NumberSet.or($0, .step($1, 7)) }
             default:
                 return nil
             }
