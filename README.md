@@ -1,14 +1,12 @@
 # Cron for Swift
 
-[![TravisCI](http://img.shields.io/travis/Ponyboy47/Cron-Swift.svg?style=flat)](https://travis-ci.org/Ponyboy47/Cron-Swift)
-
 ## Installation
 
 ### Swift Package Manager
 
 Add the following line to your `Package.swift` file
 ```swift
-.package(url: "https://github.com/Ponyboy47/Cron-Swift.git", from: "2.3.0")
+.package(url: "https://github.com/alchemy-swift/cron.git", from: "2.3.0")
 ```
 
 ## Usage
